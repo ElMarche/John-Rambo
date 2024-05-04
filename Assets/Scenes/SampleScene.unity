@@ -287,6 +287,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 1
   JumpForce: 150
+  BulletPrefab: {fileID: 6461446474167364239, guid: 882556ec3f4d61b4881677c245dbf30a, type: 3}
 --- !u!95 &140266827
 Animator:
   serializedVersion: 5

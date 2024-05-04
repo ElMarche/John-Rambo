@@ -10,6 +10,7 @@ public class JohnMovement : MonoBehaviour
     public float JumpForce;
     private bool Grounded;
     private Animator Animator;
+    public GameObject BulletPrefab;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,8 +22,10 @@ public class JohnMovement : MonoBehaviour
     void Update()
     {
         Horizontal = Input.GetAxisRaw("Horizontal") * Speed; // GetAxisRaw to capture the movement on x Axis. (1,0 or -1)
+        
         if(Horizontal < 0.0f) transform.localScale = new Vector3(-1.0f,1.0f, 1.0f);
         else if(Horizontal > 0.0f) transform.localScale = new Vector3(1.0f,1.0f, 1.0f);
+        
         Animator.SetBool("running", Horizontal != 0.0f); // Horizontal == 0 means false.
 
         //Debug.DrawRay(transform.position, Vector3.down * 0.1f, Color.red); // draw a red ray same as the raycast
@@ -30,15 +33,30 @@ public class JohnMovement : MonoBehaviour
         {
             Grounded = true;
         } else Grounded = false;
-        if (Input.GetKeyDown(KeyCode.Space) && Grounded)
+        if (Input.GetKeyDown(KeyCode.W) && Grounded)
         {
             Jump();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Shoot();
         }
     }
 
     private void Jump()
     {
         Rigidbody2D.AddForce(Vector2.up * JumpForce);
+    }
+
+    private void Shoot()
+    {
+        Vector3 direction;
+        if (transform.localScale.x == 1.0f) direction = Vector2.right;
+        else direction = Vector2.left;
+        GameObject bullet = Instantiate(BulletPrefab, transform.position + direction * 0.1f, Quaternion.identity);
+        bullet.GetComponent<BulletScript>().SetDirection(direction);
+
     }
 
     void FixedUpdate()
