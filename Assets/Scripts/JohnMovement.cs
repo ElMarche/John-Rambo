@@ -11,6 +11,8 @@ public class JohnMovement : MonoBehaviour
     private bool Grounded;
     private Animator Animator;
     public GameObject BulletPrefab;
+    private float LastShoot;
+    private float LastJump;
     // Start is called before the first frame update
     void Start()
     {
@@ -33,14 +35,16 @@ public class JohnMovement : MonoBehaviour
         {
             Grounded = true;
         } else Grounded = false;
-        if (Input.GetKeyDown(KeyCode.W) && Grounded)
+        if (Input.GetKey(KeyCode.W) && Grounded && Time.time > LastJump + 0.05f) // Input.GetKey checks key being pressed & hold
         {
             Jump();
+            LastJump = Time.time;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space) && Time.time > LastShoot + 0.25f)
         {
-            Shoot();
+            Shoot();            
+            LastShoot = Time.time;
         }
     }
 
