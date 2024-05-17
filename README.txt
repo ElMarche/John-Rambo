@@ -1,3 +1,22 @@
+May 16, 2024
+------------
+
+-Grunt_Idle
+-Animation
+-GruntScript.cs
+-transform.localScale.x = 1 or -1
+-Mathf.Abs
+-LastShoot
+-Debug.Log
+-JohnMovement John
+-GruntScript Grunt
+-collision.collider
+-Health
+-Hit()-Destroy Bullet()
+-isTrigger
+-OnTriggerEnter2D(Collider2D collision)
+-collision.GetComponent
+
 May 9, 2024
 -----------
 

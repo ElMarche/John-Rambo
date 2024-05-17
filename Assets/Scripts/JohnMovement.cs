@@ -13,6 +13,7 @@ public class JohnMovement : MonoBehaviour
     public GameObject BulletPrefab;
     private float LastShoot;
     private float LastJump;
+    private int Health = 5;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,12 +31,12 @@ public class JohnMovement : MonoBehaviour
         
         Animator.SetBool("running", Horizontal != 0.0f); // Horizontal == 0 means false.
 
-        //Debug.DrawRay(transform.position, Vector3.down * 0.1f, Color.red); // draw a red ray same as the raycast
-        if(Physics2D.Raycast(transform.position, Vector3.down, 0.1f)) // Check if its gounded so john can jump
+        //Debug.DrawRay(transform.position, Vector3.down * 0.11f, Color.red); // draw a red ray same as the raycast
+        if(Physics2D.Raycast(transform.position, Vector3.down, 0.11f)) // Check if its gounded so john can jump
         {
             Grounded = true;
         } else Grounded = false;
-        if (Input.GetKey(KeyCode.W) && Grounded && Time.time > LastJump + 0.05f) // Input.GetKey checks key being pressed & hold
+        if (Input.GetKey(KeyCode.W) && Grounded && Time.time > LastJump + 0.10f) // Input.GetKey checks key being pressed & hold
         {
             Jump();
             LastJump = Time.time;
@@ -61,6 +62,17 @@ public class JohnMovement : MonoBehaviour
         GameObject bullet = Instantiate(BulletPrefab, transform.position + direction * 0.1f, Quaternion.identity);
         bullet.GetComponent<BulletScript>().SetDirection(direction);
 
+    }
+
+    public void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        
+    }
+
+    public void Hit()
+    {
+        Health = Health - 1;
+        if (Health == 0) Destroy(gameObject);
     }
 
     void FixedUpdate()
