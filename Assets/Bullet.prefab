@@ -122,6 +122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 2
+  Sound: {fileID: 8300000, guid: dfe6b117f3427474ea81cb31bcf39d78, type: 3}
 --- !u!50 &5360615494750934845
 Rigidbody2D:
   serializedVersion: 4

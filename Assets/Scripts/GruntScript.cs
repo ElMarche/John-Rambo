@@ -8,10 +8,14 @@ public class GruntScript : MonoBehaviour
     private float LastShoot;
     public GameObject BulletPrefab;
     private int Health = 3;
+    private int maxHealth = 3;
+    // for the health bar
+    public HealthBar healthBar;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        healthBar.SetMaxHealth(maxHealth);
     }
 
     // Update is called once per frame
@@ -46,7 +50,12 @@ public class GruntScript : MonoBehaviour
 
     public void Hit()
     {
-        Health = Health - 1;
-        if (Health == 0) Destroy(gameObject);
+        Health--;
+        healthBar.SetHealth(Health);
+        if (Health == 0)
+        {
+            Destroy(gameObject);
+            GameManager.Instancia.decreaseGrunt();
+        }
     }
 }

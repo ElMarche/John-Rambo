@@ -1,3 +1,15 @@
+May 30, 2024
+------------
+
+-Added health bars to player and enemy
+
+May 23, 2024
+------------
+
+-Main Menu Screen
+-John loses Screen
+
+
 May 16, 2024
 ------------
 

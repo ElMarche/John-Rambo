@@ -7,10 +7,12 @@ public class BulletScript : MonoBehaviour
     private Rigidbody2D Rigidbody2D;
     public float Speed; // public can be worked on from Unity editor.
     private Vector2 Direction;
+    public AudioClip Sound;
     // Start is called before the first frame update
     void Start()
     {
         Rigidbody2D = GetComponent<Rigidbody2D>();
+        Camera.main.GetComponent<AudioSource>().PlayOneShot(Sound);
     }
 
     // Update is called once per frame

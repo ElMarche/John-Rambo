@@ -14,38 +14,55 @@ public class JohnMovement : MonoBehaviour
     private float LastShoot;
     private float LastJump;
     private int Health = 5;
+    private int maxHealth = 5;
+    // for the health bar
+    public HealthBar healthBar;
+
+
     // Start is called before the first frame update
     void Start()
     {
         Rigidbody2D = GetComponent<Rigidbody2D>(); // get the component Rigidbody2D
         Animator = GetComponent<Animator>(); // get the component Animator from Unity
+        healthBar.SetMaxHealth(maxHealth);
     }
 
     // Update is called once per frame
     void Update()
     {
-        Horizontal = Input.GetAxisRaw("Horizontal") * Speed; // GetAxisRaw to capture the movement on x Axis. (1,0 or -1)
-        
-        if(Horizontal < 0.0f) transform.localScale = new Vector3(-1.0f,1.0f, 1.0f);
-        else if(Horizontal > 0.0f) transform.localScale = new Vector3(1.0f,1.0f, 1.0f);
-        
-        Animator.SetBool("running", Horizontal != 0.0f); // Horizontal == 0 means false.
+        if(GameManager.Instancia.GetEstados() == Estados.Playing)
+        {
 
-        //Debug.DrawRay(transform.position, Vector3.down * 0.11f, Color.red); // draw a red ray same as the raycast
-        if(Physics2D.Raycast(transform.position, Vector3.down, 0.11f)) // Check if its gounded so john can jump
-        {
-            Grounded = true;
-        } else Grounded = false;
-        if (Input.GetKey(KeyCode.W) && Grounded && Time.time > LastJump + 0.10f) // Input.GetKey checks key being pressed & hold
-        {
-            Jump();
-            LastJump = Time.time;
-        }
+            Horizontal = Input.GetAxisRaw("Horizontal") * Speed; // GetAxisRaw to capture the movement on x Axis. (1,0 or -1)
+        
+            if(Horizontal < 0.0f) transform.localScale = new Vector3(-1.0f,1.0f, 1.0f);
+            else if(Horizontal > 0.0f) transform.localScale = new Vector3(1.0f,1.0f, 1.0f);
 
-        if (Input.GetKey(KeyCode.Space) && Time.time > LastShoot + 0.25f)
-        {
-            Shoot();            
-            LastShoot = Time.time;
+            // Destroys John if it falls below certain limit
+            if (transform.position.y < -0.7f)
+            {
+                Destroy(gameObject);
+                GameManager.Instancia.ActualizarEstados(Estados.JohnDead);
+            }
+
+            Animator.SetBool("running", Horizontal != 0.0f); // Horizontal == 0 means false.
+
+            //Debug.DrawRay(transform.position, Vector3.down * 0.1f, Color.red); // draw a red ray same as the raycast
+            if(Physics2D.Raycast(transform.position, Vector3.down, 0.1f)) // Check if its gounded so john can jump
+            {
+                Grounded = true;
+            } else Grounded = false;
+            if (Input.GetKey(KeyCode.W) && Grounded && Rigidbody2D.velocity.y >= 0.0f && Time.time > LastJump + 0.20f) // Input.GetKey checks key being pressed & hold
+            {
+                Jump();
+                LastJump = Time.time;
+            }
+
+            if (Input.GetKey(KeyCode.Space) && Time.time > LastShoot + 0.25f)
+            {
+                Shoot();            
+                LastShoot = Time.time;
+            }
         }
     }
 
@@ -71,8 +88,13 @@ public class JohnMovement : MonoBehaviour
 
     public void Hit()
     {
-        Health = Health - 1;
-        if (Health == 0) Destroy(gameObject);
+        Health--;
+        healthBar.SetHealth(Health);
+        if (Health == 0)
+        {
+            Destroy(gameObject);
+            GameManager.Instancia.ActualizarEstados(Estados.JohnDead);
+        }
     }
 
     void FixedUpdate()
